@@ -1,5 +1,4 @@
 // aqui vai as rotas da nossa api
-
 const express = require ('express');
 const router = express.Router();
 const usuariosController = require("./controllers/ctlUsuarios");
