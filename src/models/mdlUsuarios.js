@@ -52,7 +52,7 @@ const entrarUsuario = async (dadosUsuario) => {
     const qAttUltimoLogin = 'UPDATE usuarios SET dataAtualizacao = ? WHERE id = ?';
     await conexao.execute(qAttUltimoLogin, [dataUltimoLogin, usuario[0].id])
 
-    const token = jwt.sign({ email, insertId: usuario[0].id}, process.env.JWT_KEY, {expiresIn: '1m'});
+    const token = jwt.sign({ email, insertId: usuario[0].id}, process.env.JWT_KEY, {expiresIn: '30m'});
 
     return {
         id: usuario[0].id,

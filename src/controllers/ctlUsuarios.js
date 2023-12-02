@@ -12,8 +12,8 @@ const criarUsuario = async (req, res) => {
 
 const entrar = async (req, res) => {
     try{
-        const loginSucesso = await usuariosModel.entrarUsuario(req.body);
-        return res.status(201).json(loginSucesso);
+        const usuario = await usuariosModel.entrarUsuario(req.body);
+        return res.status(201).json(usuario);
     } catch(error){
         return res.status(401).json({"mensagem": "Usuário e/ou senha inválidos"});
     }
@@ -25,9 +25,9 @@ const buscar = async (req, res) => {
         const tokenDecode = jwt.verify(token, process.env.JWT_KEY);
 
         const id = tokenDecode.insertId
-        const algumUsuario = await usuariosModel.buscarUsuario(id);
+        const usuario = await usuariosModel.buscarUsuario(id);
 
-        return res.status(201).json(algumUsuario);
+        return res.status(201).json(usuario);
     } catch(error){
         if (error instanceof jwt.TokenExpiredError){
             return res.status(401).json({"mensagem": "Token expirado"})
