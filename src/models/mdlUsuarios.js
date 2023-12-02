@@ -1,6 +1,7 @@
 // aqui vai todas as funcoes que vao interagir com o nosso db e funcoes auxiliares
 const conexao = require('./conn');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const cadastrarUsuario = async (objUsuario) => {
     const { nome, email, senha, telefones} = objUsuario;
@@ -20,7 +21,7 @@ const cadastrarUsuario = async (objUsuario) => {
     
     const insertId = usuarioCriado.insertId;
     
-    const token = jwt.sign({email, insertId}, 'secretKey', {expiresIn: '30m'});
+    const token = jwt.sign({email, insertId}, process.env.JWT_KEY, {expiresIn: '30m'});
     
     const qAttUltimoLogin = 'UPDATE usuarios SET dataAtualizacao = ? WHERE id = ?';
     await conexao.execute(qAttUltimoLogin, [dataUltimoLogin, insertId])
