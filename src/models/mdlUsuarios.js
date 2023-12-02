@@ -23,9 +23,6 @@ const cadastrarUsuario = async (objUsuario) => {
     
     const token = jwt.sign({email, insertId}, process.env.JWT_KEY, {expiresIn: '30m'});
     
-    const qAttUltimoLogin = 'UPDATE usuarios SET dataAtualizacao = ? WHERE id = ?';
-    await conexao.execute(qAttUltimoLogin, [dataUltimoLogin, insertId])
-    
     const qBuscaEspecifico = 'SELECT id, dataCriacao, dataAtualizacao FROM usuarios WHERE id = ?';
     const [usuario] = await conexao.execute(qBuscaEspecifico, [insertId]);
 
@@ -38,6 +35,32 @@ const cadastrarUsuario = async (objUsuario) => {
     };
 }
 
-module.exports = {
-    cadastrarUsuario
+const entrarUsuario = async (dadosUsuario) => {
+    const { email, senha } = dadosUsuario;
+    const qBuscaEspecifico = 'SELECT * FROM usuarios WHERE email = ? AND senha = ?';
+    const [usuario] = await conexao.execute(qBuscaEspecifico, [email, senha]);
+
+    if(usuario.length === 0){
+        throw new Error();
+    }
+
+    const dataUltimoLogin = new Date(Date.now()).toUTCString();
+    const qAttUltimoLogin = 'UPDATE usuarios SET dataAtualizacao = ? WHERE id = ?';
+    await conexao.execute(qAttUltimoLogin, [dataUltimoLogin, usuario[0].id])
+
+    const token = jwt.sign({ email, insertId: usuario[0].id}, process.env.JWT_KEY, {expiresIn: '30m'});
+
+    return {
+        id: usuario[0].id,
+        dataCriacao: usuario[0].dataCriacao,
+        dataAtualizacao: usuario[0].dataAtualizacao,
+        ultimoLogin: usuario[0].dataUltimoLogin,
+        token: token
+    }
 }
+
+module.exports = {
+    cadastrarUsuario,
+    entrarUsuario
+}
+

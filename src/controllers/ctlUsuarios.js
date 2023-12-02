@@ -9,6 +9,16 @@ const criarUsuario = async (req, res) => {
     }
 }
 
+const entrar = async (req, res) => {
+    try{
+        const loginSucesso = await usuariosModel.entrarUsuario(req.body);
+        return res.status(201).json(loginSucesso);
+    } catch(error){
+        return res.status(401).json({"mensagem": "Usuário e/ou senha inválidos"});
+    }
+}
+
 module.exports = {
-    criarUsuario
+    criarUsuario,
+    entrar
 }
