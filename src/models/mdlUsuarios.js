@@ -1,6 +1,8 @@
 // aqui vai todas as funcoes que vao interagir com o nosso db e funcoes auxiliares
 const conexao = require('./conn');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+
 require('dotenv').config();
 
 const cadastrarUsuario = async (objUsuario) => {
@@ -13,11 +15,13 @@ const cadastrarUsuario = async (objUsuario) => {
         throw new Error();
     }
 
+    const senhaHash = await bcrypt.hash(senha, 10);
+
     const data = new Date(Date.now()).toUTCString();
     const dataUltimoLogin = new Date(Date.now()).toUTCString();
     
     const qInsereUsuario = 'INSERT INTO usuarios (nome, senha, email, dataCriacao, dataAtualizacao, tel_numero, tel_ddd) VALUES (?, ?, ?, ?, ?, ?, ?)';
-    const [usuarioCriado] = await conexao.execute(qInsereUsuario, [nome, senha, email, data, dataUltimoLogin, numero, ddd]);
+    const [usuarioCriado] = await conexao.execute(qInsereUsuario, [nome, senhaHash, email, data, dataUltimoLogin, numero, ddd]);
     
     const insertId = usuarioCriado.insertId;
     
