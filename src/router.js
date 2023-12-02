@@ -7,6 +7,7 @@ const usuariosController = require("./controllers/ctlUsuarios");
 a funcao de criar usuario la da nossa controller, que vai chamar
 alguma funcao da nossa model*/
 router.post('/signup', usuariosController.criarUsuario);
-router.post('/signin', usuariosController.entrar)
+router.post('/signin', usuariosController.entrar);
+router.post('/buscarusuario', usuariosController.buscar);
 
 module.exports = router;

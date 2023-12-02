@@ -1,4 +1,5 @@
 const usuariosModel = require('../models/mdlUsuarios')
+const jwt = require('jsonwebtoken');
 
 const criarUsuario = async (req, res) => {
     try{
@@ -18,7 +19,25 @@ const entrar = async (req, res) => {
     }
 }
 
+const buscar = async (req, res) => {
+    try{
+        const token = req.headers.authentication.split(' ')[1];
+        const tokenDecode = jwt.verify(token, process.env.JWT_KEY);
+
+        const id = tokenDecode.insertId
+        const algumUsuario = await usuariosModel.buscarUsuario(id);
+
+        return res.status(201).json(algumUsuario);
+    } catch(error){
+        if (error instanceof jwt.TokenExpiredError){
+            return res.status(401).json({"mensagem": "Token expirado"})
+        }
+        return res.status(401).json({"mensagem": "Não autorizado"});
+    }
+}
+
 module.exports = {
     criarUsuario,
-    entrar
+    entrar,
+    buscar
 }
