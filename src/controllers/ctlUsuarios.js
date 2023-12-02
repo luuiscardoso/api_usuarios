@@ -6,7 +6,7 @@ const criarUsuario = async (req, res) => {
         const usuarioCriado = await usuariosModel.cadastrarUsuario(req.body);
         return res.status(201).json(usuarioCriado);
     } catch(error){
-        return res.status(401).json({"mensagem": "E-mail já existente"})
+        return res.status(401).json({"mensagem": error.message})
     }
 }
 

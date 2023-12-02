@@ -41,9 +41,8 @@ const cadastrarUsuario = async (objUsuario) => {
 const entrarUsuario = async (dadosUsuario) => {
     const { email, senha } = dadosUsuario;
     const qSenhaHash = 'SELECT senha FROM usuarios WHERE email = ?';
-    console.log(qSenhaHash)
+    
     const [senhaHash] = await conexao.execute(qSenhaHash, [email]);
-    console.log(senhaHash)
 
     if(senhaHash.length === 0){throw new Error();}
 
