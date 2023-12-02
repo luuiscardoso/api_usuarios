@@ -41,12 +41,23 @@ const cadastrarUsuario = async (objUsuario) => {
 
 const entrarUsuario = async (dadosUsuario) => {
     const { email, senha } = dadosUsuario;
-    const qBuscaEspecifico = 'SELECT * FROM usuarios WHERE email = ? AND senha = ?';
-    const [usuario] = await conexao.execute(qBuscaEspecifico, [email, senha]);
+    const qSenhaHash = 'SELECT senha FROM usuarios WHERE email = ?';
+    console.log(qSenhaHash)
+    const [senhaHash] = await conexao.execute(qSenhaHash, [email]);
+    console.log(senhaHash)
 
-    if(usuario.length === 0){
-        throw new Error();
-    }
+    if(senhaHash.length === 0){throw new Error();}
+
+    const senhaHashArmazenada = senhaHash[0].senha;
+    console.log(senhaHashArmazenada)
+    const senhaCerta = await bcrypt.compare(senha, senhaHashArmazenada);
+
+    if(!senhaCerta){throw new Error()};
+
+    const qBuscaEspecifico = 'SELECT * FROM usuarios WHERE email = ? AND senha = ?';
+    const [usuario] = await conexao.execute(qBuscaEspecifico, [email, senhaHashArmazenada]);
+
+    if(usuario.length === 0){throw new Error();}
 
     const dataUltimoLogin = new Date(Date.now()).toUTCString();
     const qAttUltimoLogin = 'UPDATE usuarios SET dataAtualizacao = ? WHERE id = ?';
