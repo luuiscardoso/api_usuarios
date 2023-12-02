@@ -5,7 +5,6 @@ const bcrypt = require('bcrypt');
 require('dotenv').config();
 
 const cadastrarUsuario = async (objUsuario) => {
-    try{
         const { nome, email, senha, telefones} = objUsuario;
         const { numero, ddd} = telefones[0];
     
@@ -37,9 +36,6 @@ const cadastrarUsuario = async (objUsuario) => {
             ultimoLogin: usuario[0].dataAtualizacao,
             token: token
         };
-    } catch{error}{
-        throw new Error()
-    }
 }
 
 const entrarUsuario = async (dadosUsuario) => {
