@@ -1,4 +1,3 @@
-// aqui vai todas as funcoes que vao interagir com o nosso db e funcoes auxiliares
 const conexao = require('./conn');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
