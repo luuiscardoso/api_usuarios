@@ -12,7 +12,7 @@ const cadastrarUsuario = async (objUsuario) => {
         const [emailExistente] = await conexao.execute('SELECT * FROM usuarios WHERE email = ?', [email]);
     
         if(emailExistente.length > 0){
-            throw new Error();
+            throw new Error(error.message('E-mail já existente'));
         }
     
         const senhaHash = await bcrypt.hash(senha, 10);
