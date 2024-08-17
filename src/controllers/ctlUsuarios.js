@@ -6,7 +6,7 @@ const criarUsuario = async (req, res) => {
         const usuarioCriado = await usuariosModel.cadastrarUsuario(req.body);
         return res.status(201).json(usuarioCriado);
     } catch(error){
-        return res.status(401).json({"mensagem": error.message})
+        return res.status(401).json({ mensagem: error.message });
     }
 }
 
@@ -15,13 +15,14 @@ const entrar = async (req, res) => {
         const usuario = await usuariosModel.entrarUsuario(req.body);
         return res.status(201).json(usuario);
     } catch(error){
-        return res.status(401).json({"mensagem": "Usuário e/ou senha inválidos"});
+        console.error('Erro ao entrar:', error); 
+        return res.status(401).json({ mensagem: error.message });
     }
 }
 
 const buscar = async (req, res) => {
     try{
-        const token = req.headers.authentication.split(' ')[1];
+        const token = req.headers.authorization.split(' ')[1];
         const tokenDecode = jwt.verify(token, process.env.JWT_KEY);
 
         const id = tokenDecode.insertId

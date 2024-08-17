@@ -11,16 +11,16 @@ const cadastrarUsuario = async (objUsuario) => {
         const [emailExistente] = await conexao.execute('SELECT * FROM usuarios WHERE email = ?', [email]);
     
         if(emailExistente.length > 0){
-            throw new Error();
+            throw new Error("Já existe um usuário com o e-mail informado");
         }
     
         const senhaHash = await bcrypt.hash(senha, 10);
     
-        const data = new Date(Date.now()).toUTCString();
-        const dataUltimoLogin = new Date(Date.now()).toUTCString();
+        const dataAtual = new Date();
+        const dataFormatada = dataAtual.toISOString().slice(0, 19).replace('T', ' ');
         
         const qInsereUsuario = 'INSERT INTO usuarios (nome, senha, email, dataCriacao, dataAtualizacao, tel_numero, tel_ddd) VALUES (?, ?, ?, ?, ?, ?, ?)';
-        const [usuarioCriado] = await conexao.execute(qInsereUsuario, [nome, senhaHash, email, data, dataUltimoLogin, numero, ddd]);
+        const [usuarioCriado] = await conexao.execute(qInsereUsuario, [nome, senhaHash, email, dataFormatada, dataFormatada, numero, ddd]);
         
         const insertId = usuarioCriado.insertId;
         
@@ -44,20 +44,21 @@ const entrarUsuario = async (dadosUsuario) => {
     
     const [senhaHash] = await conexao.execute(qSenhaHash, [email]);
 
-    if(senhaHash.length === 0){throw new Error();}
+    if(senhaHash.length === 0){throw new Error("Não existe um usuário com o e-mail informado");}
 
     const senhaHashArmazenada = senhaHash[0].senha;
     console.log(senhaHashArmazenada)
     const senhaCerta = await bcrypt.compare(senha, senhaHashArmazenada);
 
-    if(!senhaCerta){throw new Error()};
+    if(!senhaCerta){throw new Error("Senha inválida")};
 
     const qBuscaEspecifico = 'SELECT * FROM usuarios WHERE email = ? AND senha = ?';
     const [usuario] = await conexao.execute(qBuscaEspecifico, [email, senhaHashArmazenada]);
 
-    if(usuario.length === 0){throw new Error();}
+    if(usuario.length === 0){throw new Error("Senha inválida");}
 
-    const dataUltimoLogin = new Date(Date.now()).toUTCString();
+    const dataAtual = new Date();
+    const dataUltimoLogin = dataAtual.toISOString().slice(0, 19).replace('T', ' ');
     const qAttUltimoLogin = 'UPDATE usuarios SET dataAtualizacao = ? WHERE id = ?';
     await conexao.execute(qAttUltimoLogin, [dataUltimoLogin, usuario[0].id])
 
