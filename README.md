@@ -1,6 +1,6 @@
 # API de Usuários
 
-Esta é uma API para gerenciamento de usuários. Ela permite que você se registre, faça login e recupere informações sobre o perfil do usuário. A API foi desenvolvida utilizando Node.js e JavaScript, e utiliza criptografia com bcrypt para senhas, JWK para tokens, ESLint para padronização, Docker como container para MySQL e foi implantada no Heroku.
+Esta é uma API para gerenciamento de usuários. Ela permite que você se registre, faça login e recupere informações sobre o perfil do usuário. A API foi desenvolvida utilizando Node.js e JavaScript, e utiliza criptografia com bcrypt para senhas, JWT para tokens, ESLint para padronização, Docker como container para MySQL e foi implantada no Heroku.
 
 ## Endpoints
 
@@ -77,7 +77,7 @@ Esta é uma API para gerenciamento de usuários. Ela permite que você se regist
 
 - **Node.js** e **JavaScript** para o desenvolvimento da API.
 - **Criptografia** com **bcrypt** para segurança das senhas.
-- **Tokens JWK** para autenticação.
+- **Tokens JWT** para autenticação.
 - **ESLint** para padronização de código.
 - **Docker** para a imagem do MySQL.
 - **Heroku** para o deploy da aplicação.
