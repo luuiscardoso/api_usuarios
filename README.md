@@ -61,7 +61,7 @@ Esta é uma API para gerenciamento de usuários. Ela permite que você se regist
     ```
 
 ### 3. **Perfil do Usuário**
-- **Endpoint:** `GET /profile`
+- **Endpoint:** `GET /buscarusuarios`
 - **Descrição:** Retorna os dados do usuário cadastrado com base no token de autenticação.
 - **Requisição:**
   - **URL:** `https://rest-api-users-2979d271e883.herokuapp.com/buscarusuario`
